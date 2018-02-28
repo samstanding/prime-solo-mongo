@@ -1,0 +1,25 @@
+Create a collection named orders.
+db.createCollection('orders')
+Insert at least 3 documents that represent an order. IMPORTANT: See section below for fields. Order dates should be: 2017-02-03, 2017-04-04, 2017-01-02
+
+orders.insert ( {date: new Date "2017-02-03"})
+orders.insert ( {date: new Date ("2017-02-03")})
+orders.insert ( { date: new Date ("2017-01-02")})
+
+Find all orders and make them look pretty.
+orders.find().prettyy()
+
+Find all orders with an orderDate that is after 1/31/2017.
+orders.find({date: {$gt: ISODate("2017-01-31")}})
+
+Change the orderTotal from 2/3/2017 to 63 dollars (you do NOT have to ensure the lineItems' unitPrice * quantity add up to the orderTotal)
+orders.update({date:"2017-02-03"},{$push: {orderTotal: $63}})
+
+Add another lineItem to the order from 4/4/2017
+db.getCollection('orders').update({"date": ISODate("2017-04-04T00:00:00Z")}, {$push: {"lineItems" :{"unitPrice":"$12", "quantity": 7, "productName": "Bananas"}}})
+
+Change the first lineItem in the order from 1/2/2017 to be for 2 'transistor radio's
+db.getCollection('orders').update({"date": ISODate("2017-01-02T00:00:00Z")}, {$set: {"lineItems" :{"unitPrice":"$12", "quantity": 2, "productName": "Transistor Radios"}}})
+
+Find orders with lineItems that have a quantity that is less than 10, but greater than 2. You will have to research $elemMatch
+db.getCollection('orders').find({"lineItems":{ $elemMatch: {"quantity": {$gte:2, $lt: 10}}}})
